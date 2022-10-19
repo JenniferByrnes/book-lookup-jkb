@@ -35,9 +35,9 @@ const SignupForm = () => {
 
     try {
       console.log("jkb in try calling addUser");
-      const { data } = await addUser({ variable: { userFormData }} );
-      console.log("data=", data);
-      console.log("userFormData=", userFormData);
+      const { data } = await addUser({ variables: { userFormData }} );
+      console.log("jkb data=", data);
+      console.log("jkb userFormData=", userFormData);
       
       if (!data.ok) {
         throw new Error('something went wrong!');
