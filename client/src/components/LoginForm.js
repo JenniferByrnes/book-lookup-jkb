@@ -13,8 +13,9 @@ const LoginForm = () => {
   const [validated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
 
-  const [loginUser, { response }] = useMutation(LOGIN_USER);
+  const [loginUser] = useMutation(LOGIN_USER);
 
+  // Why is this code needed?
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setUserFormData({ ...userFormData, [name]: value });
@@ -22,6 +23,7 @@ const LoginForm = () => {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
+    console.log("jkb in handleFormSubmit(loginuser)=", loginUser);
 
     // check if form has everything (as per react-bootstrap docs)
     const form = event.currentTarget;
@@ -29,16 +31,17 @@ const LoginForm = () => {
       event.preventDefault();
       event.stopPropagation();
     }
-
+    console.log("jkb before try=(loginuser)=", userFormData);
     try {
-      const { data } = await loginUser({ variables: { userFormData }} );
-      
+      const { data } = await loginUser({ variables: { ...userFormData }} );
 
-      if (!data.ok) {
+      if (!data.login.token) {
         throw new Error('something went wrong!');
       }
 
-      const { token, user } = await data.json();
+      const { token } = await data.login.token;
+      const { user } = await data.login.user.username;
+
       console.log(user);
       Auth.login(token);
     } catch (err) {

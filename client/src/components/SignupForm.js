@@ -24,30 +24,27 @@ const SignupForm = () => {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    console.log("jkb userFormData=", userFormData);
     // check if form has everything (as per react-bootstrap docs)
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
-      console.log("jkb form.checkValidity() === false");
     }
 
     try {
-      console.log("jkb in try calling addUser");
-      const { data } = await addUser({ variables: { userFormData }} );
-      console.log("jkb data=", data);
-      console.log("jkb userFormData=", userFormData);
-      
-      if (!data.ok) {
+      const { data } = await addUser({ variables: { ...userFormData }} );
+
+      if (!data) {
         throw new Error('something went wrong!');
       }
 
-      const { token, user } = await data.json();
+      const { token } = await data.addUser.token;
+      const { user } = await data.addUser.user;
+
       console.log(user);
       Auth.login(token);
-    } catch (err) {
-      console.log("jkb in catch (err)");
+    } 
+    catch (err) {
       console.error(err);
       setShowAlert(true);
     }
