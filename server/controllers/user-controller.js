@@ -18,10 +18,7 @@ module.exports = {
   },
   // create a user, sign a token, and send it back (to client/src/components/SignUpForm.js)
   async createUser({ body }, res) {
-    console.log("jkb controller createUser body=", body)
     const user = await User.create(body);
-    console.log("jkb user=", user)
-    console.log("jkb body after=", body)
 
     if (!user) {
       return res.status(400).json({ message: 'Something is wrong!' });
@@ -32,7 +29,7 @@ module.exports = {
   // login a user, sign a token, and send it back (to client/src/components/LoginForm.js)
   // {body} is destructured req.body
   async login({ body }, res) {
-    console.log("jkb controller login body=", body)
+
     const user = await User.findOne({ $or: [{ username: body.username }, { email: body.email }] });
     if (!user) {
       return res.status(400).json({ message: "Can't find this user" });

@@ -36,7 +36,6 @@ const SearchBooks = () => {
 
     try {
       const response = await searchGoogleBooks(searchInput);
-
       if (!response.ok) {
         throw new Error('something went wrong!');
       }
@@ -60,31 +59,20 @@ const SearchBooks = () => {
 
   // create function to handle saving a book to our database
   const handleSaveBook = async (bookId) => {
-    console.log("jkb bookId=", bookId);
     // find the book in `searchedBooks` state by the matching id
     const bookToSave = searchedBooks.find((book) => book.bookId === bookId);
-    console.log("jkb bookToSave=", bookToSave);
 
     // get token
-    console.log("jkb Auth=", Auth);
     const token = Auth.loggedIn() ? Auth.getToken() : null;
-
     if (!token) {
-      console.log("jkb false token=");
       return false;
     }
-    console.log("jkb token=", token);
+    
     try {
-      console.log("jkb in try=");
-      const { data } = await saveBook({ variables: { bookData: { bookToSave } } });
-      console.log("jkb data=", data);
-      console.log("data=", data);
-
+      const { data } = await saveBook({ variables: { bookData: { ...bookToSave } } });
       // if book successfully saves to user's account, save book id to state
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);
-      console.log("jkb setSavedBookIds=", setSavedBookIds);
     } catch (err) {
-      console.log("jkb err=", err);
       console.error(err);
     }
   };

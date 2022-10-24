@@ -23,7 +23,6 @@ const LoginForm = () => {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    console.log("jkb in handleFormSubmit(loginuser)=", loginUser);
 
     // check if form has everything (as per react-bootstrap docs)
     const form = event.currentTarget;
@@ -31,19 +30,10 @@ const LoginForm = () => {
       event.preventDefault();
       event.stopPropagation();
     }
-    console.log("jkb before try=(loginuser)=", userFormData);
     try {
       const { data } = await loginUser({ variables: { ...userFormData }} );
 
-      if (!data.login.token) {
-        throw new Error('something went wrong!');
-      }
-
-      const { token } = await data.login.token;
-      const { user } = await data.login.user.username;
-
-      console.log(user);
-      Auth.login(token);
+      Auth.login(data.login.token);
     } catch (err) {
       console.error(err);
       setShowAlert(true);
