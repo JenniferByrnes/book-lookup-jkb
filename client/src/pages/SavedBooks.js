@@ -14,6 +14,8 @@ const SavedBooks = () => {
   const { loading, data } = useQuery(GET_ME);
 
   const userData = data?.me || {};
+  console.log("jkb userData=");
+  console.log(userData);
 
   const [deleteBook] = useMutation(REMOVE_BOOK);
 
